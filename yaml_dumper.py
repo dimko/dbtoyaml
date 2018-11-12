@@ -1,25 +1,17 @@
-import argparse
-import postgresClient
-import yaml
+import postgresClient, yaml, argParser
 
 
-def toYaml(table, columns=None):
-    ymlFile = file('out/{}.yaml'.format(table), 'w')
-    dbData = postgresClient.readTable(table, columns)
-
-    for data in dbData:
-        yaml.dump(data, stream=ymlFile, default_flow_style=False)
-        ymlFile.write("\r")
+def toYaml(tables = argParser.parseTablesColumns().tables, columns = argParser.parseTablesColumns().columns):
 
 
-def parseArgs(table, columns):
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-t', '--table', required=True, default='users')
-    parser.add_argument('-c', '--columns', required=False, nargs='*')
-    arguments = parser.parse_args(table, columns)
+    print "Create yml files for tables: {} and columns: {}".format(", ".join(tables), ", ".join(columns))
+    for t in tables:
+        ymlFile = file('out/{}.yml'.format(t), 'w')
+        dbData = postgresClient.readTable(t, columns)
 
-    return (arguments.table, arguments.columns)
-
+        for data in dbData:
+            yaml.dump(data, stream=ymlFile, default_flow_style=False)
+            ymlFile.write("\r")
 
 if __name__ == "__main__":
-    toYaml(parseArgs('-t table', '-c [\'email\']'))
+    toYaml()
