@@ -3,13 +3,13 @@ import psycopg2.extras as extras
 import configParser as config
 
 
-def connect(conf='local'):
+def connect(conf, section):
     try:
-        conn = psycopg2.connect(database=config.fetch(key='name', file=conf),
-                                host=config.fetch(key='localhost', file=conf),
-                                port=config.fetch(key='port', file=conf),
-                                user=config.fetch(key='user', file=conf),
-                                password=config.fetch(key='password', file=conf), cursor_factory=extras.DictCursor)
+        conn = psycopg2.connect(database=config.fetch(key='name', file=conf, section=section),
+                                host=config.fetch(key='localhost', file=conf, section=section),
+                                port=config.fetch(key='port', file=conf, section=section),
+                                user=config.fetch(key='user', file=conf, section=section),
+                                password=config.fetch(key='password', file=conf, section=section), cursor_factory=extras.DictCursor)
         return conn
     except:
         print "Connection error, please check your connection settings"
@@ -24,10 +24,10 @@ def close(connection):
 
 
 
-def readTable(table, columns, conf = 'local'):
+def readTable(table, columns, conf, section):
     results = []
     try:
-        conn = connect(conf)
+        conn = connect(conf=conf, section=section)
         cur = conn.cursor()
         cur.execute("SELECT {} FROM {}".format(", ".join(columns), table))
         for i in cur.fetchall():

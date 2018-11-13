@@ -1,8 +1,7 @@
 import configparser, os
 
 
-def fetch(key = '', file = 'local'):
+def fetch(key, file, section):
     config = configparser.ConfigParser()
     config.read(os.path.join("properties/", "{}.conf".format(file)))
-    for section in config.sections():
-            return config[section].get(key)
+    return config[section].get(key)
