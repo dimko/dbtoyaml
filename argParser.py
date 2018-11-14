@@ -8,7 +8,7 @@ def parseTablesColumns():
     parser.add_argument('-s', '--section', required=False, help='section of conf file to be used', default='workable_database')
     arguments = parser.parse_args()
     return arguments
-    # return (arguments.table, arguments.columns)
+
 
 if __name__ == "__main__":
     parseTablesColumns()
