@@ -17,7 +17,8 @@ def connect(conf, section):
 
 def close(connection):
     try:
-        connection.cur.close()
+        connection.cursor().close()
+        connection.close()
     except:
         print "Connection not closed!"
         raise
@@ -32,6 +33,7 @@ def readTable(table, columns, conf, section):
         cur.execute("SELECT {} FROM {}".format(", ".join(columns), table))
         for val in cur.fetchall():
             results.append({val[0][:len(val[0])].lower().replace(" ", ""): dict(val)})
+        close(conn)
         if results is not None:
             return results
     except:
