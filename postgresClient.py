@@ -30,8 +30,8 @@ def readTable(table, columns, conf, section):
         conn = connect(conf=conf, section=section)
         cur = conn.cursor()
         cur.execute("SELECT {} FROM {}".format(", ".join(columns), table))
-        for i in cur.fetchall():
-            results.append(dict(i))
+        for val in cur.fetchall():
+            results.append({val[0][:len(val[0])].lower().replace(" ", ""): dict(val)})
         if results is not None:
             return results
     except:
